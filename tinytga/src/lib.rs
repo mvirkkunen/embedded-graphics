@@ -101,8 +101,6 @@ impl<'a> IntoIterator for &'a Tga<'a> {
             .expect("Failed to parse first image data packet");
 
         TgaIterator {
-            x: 0,
-            y: 0,
             tga: self,
             bytes_to_consume,
             current_packet,
@@ -112,14 +110,10 @@ impl<'a> IntoIterator for &'a Tga<'a> {
 }
 
 /// Iterator over individual TGA pixels
+///
+/// This can be used to build a raw image buffer to pass around
 #[derive(Debug)]
 pub struct TgaIterator<'a> {
-    /// Current pixel X coordinate
-    x: u32,
-
-    /// Current pixel Y coordinate
-    y: u32,
-
     /// Reference to original TGA image
     tga: &'a Tga<'a>,
 
@@ -138,5 +132,23 @@ impl<'a> Iterator for TgaIterator<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         None
+
+        // If current packet condition == current packet length and there are no more bytes to consume
+        //   Return None
+
+        // Out =
+        //   If RLE
+        //     Packet's colour
+        //   Else
+        //     Packet's data indexed
+        //     TODO: Construct u32 from N bytes
+
+        // If current packet position < current packet length
+        //   Increment current pos by one
+        // Else if there are more bytes in bytes_to_consume
+        //   Reset current pos to 0
+        //   Reassign current packet
+
+        // Return out
     }
 }
